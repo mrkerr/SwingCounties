@@ -9,6 +9,6 @@ function parseData(){
 
 function printWords(data){
   for(var i = 0; i<data.length; i++){
-    console.log(data[i][0]);
+    console.log("County: " + data[i][0] + "Swing: " + data[i][8]);
   }
 }

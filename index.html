@@ -1,10 +1,105 @@
 <!DOCTYPE html>
 <html>
+<head>
+<style>
+body  {
+    background-image: url('/images/field.jpg');
+	-webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+#afghan{
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+h1{
+ font-family: "Courier New", "Helvetica", Times, serif;
+ top: 5%;
+ text-align: center;
+ color: white;
+
+}
+
+
+</style>
+
+
+
+
+</head>
+
+
 <body>
+<script src="javascript/d3.v3.min.js"></script>
+<script src="javascript/topojson.v1.min.js"></script>
+<script src="javascript/datamaps.usa.min.js"></script>
 <script src="javascript/papaparse.min.js"></script>
 <script src="javascript/ParseData.js"></script>
-<button type="button" onclick="parseData()">Click Me!</button>
 
+<h1>4th District Swing County Map</h1>
+
+
+
+
+<div id="counties" style="height: 1000px; width: 900px;"></div>
+
+
+
+
+
+
+<script>
+  var map = new Datamap({
+    element: document.getElementById('counties'),
+    geographyConfig: {
+      dataUrl: 'topoJSON/Iowa.topo.json'
+    },
+    scope: 'Iowa.geo',
+    setProjection: function(element, options) {
+      var projection, path;
+      projection = d3.geo.albersUsa()
+        .scale(element.offsetWidth)
+        .translate([element.offsetWidth / 2, element.offsetHeight / 2  ]);
+      path = d3.geo.path()
+        .projection( projection );
+      return {path: path, projection: projection};
+    }
+  });
+
+/**
+  var map = new Datamap({
+    element: document.getElementById('afghan'),
+    geographyConfig: {
+      dataUrl: 'topoJSON/Iowa.topo.json'
+    },
+    scope: 'afghan',
+    fills: {
+      defaultFill: '#bada55',
+      someKey: '#fa0fa0'
+    },
+    data: {
+      'AFG-1758': {fillKey: 'someKey'},
+      'AFG-1747': {fillKey: 'someKey'}
+    },
+    setProjection: function(element) {
+      var projection = d3.geo.mercator()
+        .center([66.166667, 34.4444])
+        .scale(2200)
+        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
+       var path = d3.geo.path().projection(projection);
+       return {path: path, projection: projection};
+    }
+  });
+  **/
+</script>
+</body>
 
 
 </body>
