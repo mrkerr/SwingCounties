@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<meta charset="utf-8"/>
 <style>
 body  {
     background-image: url('/images/field.jpg');
@@ -12,10 +13,10 @@ body  {
     background-attachment: fixed;
 }
 
-#afghan{
+#counties{
   position: fixed;
-  top: 45%;
-  left: 50%;
+  top: 80%;
+  left: 35%;
   transform: translate(-50%, -50%);
 }
 
@@ -48,20 +49,25 @@ h1{
 
 
 
-<div id="counties" style="height: 1000px; width: 900px;"></div>
-
-
-
-
-
+<div id="counties" style="height: 800%; width: 400%;"></div>
 
 <script>
+  var COLOR = 'blue';
+
   var map = new Datamap({
     element: document.getElementById('counties'),
     geographyConfig: {
-      dataUrl: 'topoJSON/Iowa.topo.json'
+      dataUrl: 'topoJSON/Iowa.topo.json',
+      highlightFillColor: '#FC8D59',
     },
     scope: 'Iowa.geo',
+  fills: {
+	    HIGH: '#afafaf',
+            LOW: '#123456',
+            MEDIUM: 'blue',
+            UNKNOWN: 'rgb(0,0,0)',
+      defaultFill: '#e7f4f6' // The keys in this object map to the "fillKey" of [data] or [bubbles]
+    },
     setProjection: function(element, options) {
       var projection, path;
       projection = d3.geo.albersUsa()
@@ -73,31 +79,20 @@ h1{
     }
   });
 
-/**
-  var map = new Datamap({
-    element: document.getElementById('afghan'),
-    geographyConfig: {
-      dataUrl: 'topoJSON/Iowa.topo.json'
-    },
-    scope: 'afghan',
-    fills: {
-      defaultFill: '#bada55',
-      someKey: '#fa0fa0'
-    },
-    data: {
-      'AFG-1758': {fillKey: 'someKey'},
-      'AFG-1747': {fillKey: 'someKey'}
-    },
-    setProjection: function(element) {
-      var projection = d3.geo.mercator()
-        .center([66.166667, 34.4444])
-        .scale(2200)
-        .translate([element.offsetWidth / 2, element.offsetHeight / 2]);
-       var path = d3.geo.path().projection(projection);
-       return {path: path, projection: projection};
+map.updateChoropleth({
+   Boone: {fillKey: 'LOW'},
+   Mitchell: '#0fa0fa'
+});
+
+function parseData(){
+  Papa.parse("data/data.csv", {
+    download: true,
+    complete: function(results) {
+      printWords(results.data);
     }
   });
-  **/
+}
+
 </script>
 </body>
 
