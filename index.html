@@ -1,8 +1,13 @@
 <!DOCTYPE html>
+
 <html>
+
 <head>
+
 <meta charset="utf-8"/>
+
 <style>
+
 body  {
     background-image: url('/images/field.jpg');
 	-webkit-background-size: cover;
@@ -20,30 +25,32 @@ body  {
   transform: translate(-50%, -50%);
 }
 
-#fileIN{
-top: 60%;
-left: 45%;
-position: fixed;
-}
-
 h1{
  font-family: "Courier New", "Helvetica", Times, serif;
  top: 50%;
  text-align: center;
  color: white;
-
 }
 
+#fileIN{
+font-family: "Courier New", "Helvetica", Times, serif;
+color: white;
+text-align: center;
+position: relative;
+}
+
+#row{
+position: relative;
+top: 50px;
+left: 22%;
+}
 
 </style>
 
-
-
-
 </head>
 
-
 <body>
+
 <script src="javascript/d3.v3.min.js"></script>
 <script src="javascript/topojson.v1.min.js"></script>
 <script src="javascript/datamaps.usa.min.js"></script>
@@ -52,49 +59,27 @@ h1{
 
 <h1>4th District Swing County Map</h1>
 
-
-
-
-
 <div id="counties" style="height: 800%; width: 400%;"></div>
 
 <div id="fileIN">
-<input type="file"/>
+Select CSV File for upload <br>
+File must be in proper format with correct spelling as shown below<br>
+<input type="file" id='file' accept=".csv">
 </div>
 
+<img id='row' src = '/images/properRow.png'></img>
+
 <script>
-var darkblue = 'Navy';
-var mediumblue = 'MediumBlue';
-var DodgerBlue = 'DodgerBlue';
-var deepskyblue = 'DeepSkyBlue';
-var powderblue = 'PowderBlue';
-var pink = 'Pink';
-var lightsalmon = 'LightSalmon';
-var salmon = 'Salmon';
-var orangered = 'OrangeRed';
-var red = 'Red';
-
-
 
 var map = new Datamap({
     element: document.getElementById('counties'),
     geographyConfig: {
       dataUrl: 'topoJSON/Iowa.topo.json',
-      highlightFillColor: '#FC8D59',
+      highlightFillColor: '#A6CFEB',
     },
     scope: 'Iowa.geo',
   fills: {
-	    SUPER_STRONG_REPUBLICAN: '#A20007',
-            PRETTY_STRONG_REPUBLICAN: '#CE0000',
-            FAIRLY_STRONG_REPUBLICAN: '#DF686B',
-            STRONG_REPUBLICAN: '#EC979A',
-            REPUBLICAN:'#EFCACB',
-            DEMOCRAT: '#CAE1F8',
-            STRONG_DEMOCRAT: '#A3CAEE',
-            FAIRLY_STRONG_DEMOCRAT: '#6DA5D6',
-            PRETTY_STRONG_DEMOCRAT: '#4185C2',
-            SUPER_STRONG_DEMOCRAT: '#09508E',
-      	    defaultFill: 'LightSlateGray' 
+      	    defaultFill: '#BBFF33' 
 },
     setProjection: function(element, options) {
       var projection, path;
@@ -107,8 +92,6 @@ var map = new Datamap({
     }
   });
 
-
-
 function changeColor(countyCode, color){
   var obj = {};
   obj[countyCode] = color;
@@ -116,8 +99,6 @@ function changeColor(countyCode, color){
 }
 
 var updateMap = function(arr) {
-
-
 for(var i =1; i<arr.length; i++){
 	var name;
 	if(i==3){
@@ -138,66 +119,260 @@ for(var i =1; i<arr.length; i++){
 var type = getType(arr[i][8]);
 changeColor(name, type);
 }
-
-
 };
 
 
-
-
-
-window.onload = function parseData(){
-  Papa.parse("data/data.csv", {
+document.getElementById('file').onchange = function parseData(){
+	var selectedFile = document.getElementById('file').files[0];
+  Papa.parse(selectedFile, {
     download: true,
     complete: function(results) {
-      updateMap(results.data);
+		if(checkFile(results.data)){
+			updateMap(results.data);
+		}
     }
   });
+};
+
+function checkFile(arr){
+if(arr[0][0] !== "County"){
+alert("County spelled incorrectly");
+return false;
 }
-
- 
-
-
-
-
-
-
-
+if(arr[0][1] !== 'Dem Act.'){
+alert("Dem Act. spelled incorrectly");
+return false;
+}
+if(arr[0][2] !== 'Rep Act.'){
+alert("Rep Act. spelled incorrectly");
+return false;
+}
+if(arr[0][3] !== 'No Party'){
+alert("No Party spelled incorrectly");
+return false;
+}
+if(arr[0][4] !== 'Total Active (-3rd Party)'){
+alert("Total Active (-3rd Party) spelled incorrectly");
+return false;
+}
+if(arr[0][5] !== 'Dem Turnout'){
+alert("Dem Turnout spelled incorrectly");
+return false;
+}
+if(arr[0][6] !== 'Rep Turnout'){
+alert("Rep Turnou spelled incorrectly");
+return false;
+}
+if(arr[0][7] !== 'Rel Turnout'){
+alert("Rel Turnout spelled incorrectly");
+return false;
+}
+if(arr[0][8] !== 'Swing Margin'){
+alert("Swing Margin spelled incorrectly");
+return false;
+}
+if(arr[0][9] !== 'Sioux-Constant Output'){
+alert("Sioux-Constant Output spelled incorrectly");
+return false;
+}
+if(arr[0][10] !== 'Raw'){
+alert("Raw spelled incorrectly");
+return false;
+}
+if(arr[1][0] !== 'Audubon'){
+alert("Audubon spelled incorrectly");
+return false;
+}
+if(arr[2][0] !== 'Boone'){
+alert("Boone spelled incorrectly");
+return false;
+}
+if(arr[3][0] !== 'Buena Vista'){
+alert("Buena Vista spelled incorrectly");
+return false;
+}
+if(arr[4][0] !== 'Butler'){
+alert("Butler spelled incorrectly");
+return false;
+}
+if(arr[5][0] !== 'Calhoun'){
+alert("Calhoun spelled incorrectly");
+return false;
+}
+if(arr[6][0] !== 'Carroll'){
+alert("Carroll spelled incorrectly");
+return false;
+}
+if(arr[7][0] !== 'Cerro Gordo'){
+alert("Cerro Gordo spelled incorrectly");
+return false;
+}
+if(arr[8][0] !== 'Cherokee'){
+alert("Cherokee spelled incorrectly");
+return false;
+}
+if(arr[9][0] !== 'Chickasaw'){
+alert("Chickasaw spelled incorrectly");
+return false;
+}
+if(arr[10][0] !== 'Clay'){
+alert("Clay spelled incorrectly");
+return false;
+}
+if(arr[11][0] !== 'Crawford'){
+alert("Crawford spelled incorrectly");
+return false;
+}
+if(arr[12][0] !== 'Dickinson'){
+alert("Dickinson spelled incorrectly");
+return false;
+}
+if(arr[13][0] !== 'Emmet'){
+alert("Emmet spelled incorrectly");
+return false;
+}
+if(arr[14][0] !== 'Floyd'){
+alert("Floyd spelled incorrectly");
+return false;
+}
+if(arr[15][0] !== 'Franklin'){
+alert("Franklin spelled incorrectly");
+return false;
+}
+if(arr[16][0] !== 'Greene'){
+alert("Greene spelled incorrectly");
+return false;
+}
+if(arr[17][0] !== 'Grundy'){
+alert("Grundy spelled incorrectly");
+return false;
+}
+if(arr[18][0] !== 'Hamilton'){
+alert("Hamilton spelled incorrectly");
+return false;
+}
+if(arr[19][0] !== 'Hancock'){
+alert("Hancock spelled incorrectly");
+return false;
+}
+if(arr[20][0] !== 'Hardin'){
+alert("Hardin spelled incorrectly");
+return false;
+}
+if(arr[21][0] !== 'Harrison'){
+alert("Harrison spelled incorrectly");
+return false;
+}
+if(arr[22][0] !== 'Humboldt'){
+alert("Humboldt spelled incorrectly");
+return false;
+}
+if(arr[23][0] !== 'Ida'){
+alert("Ida spelled incorrectly");
+return false;
+}
+if(arr[24][0] !== 'Kossuth'){
+alert("Kossuth spelled incorrectly");
+return false;
+}
+if(arr[25][0] !== 'Lyon'){
+alert("Lyon spelled incorrectly");
+return false;
+}
+if(arr[26][0] !== 'Monona'){
+alert("Monona spelled incorrectly");
+return false;
+}
+if(arr[27][0] !== 'O\'Brien'){
+alert("O\'Brien spelled incorrectly");
+return false;
+}
+if(arr[28][0] !== 'Osceola'){
+alert("Osceola spelled incorrectly");
+return false;
+}
+if(arr[29][0] !== 'Palo Alto'){
+alert("Palo Alto spelled incorrectly");
+return false;
+}
+if(arr[30][0] !== 'Plymouth'){
+alert("Plymouth spelled incorrectly");
+return false;
+}
+if(arr[31][0] !== 'Pocahontas'){
+alert("Pocahontas spelled incorrectly");
+return false;
+}
+if(arr[32][0] !== 'Sac'){
+alert("Sac spelled incorrectly");
+return false;
+}
+if(arr[33][0] !== 'Shelby'){
+alert("Shelby spelled incorrectly");
+return false;
+}
+if(arr[34][0] !== 'Sioux'){
+alert("Sioux spelled incorrectly");
+return false;
+}
+if(arr[35][0] !== 'Story'){
+alert("Story spelled incorrectly");
+return false;
+}
+if(arr[36][0] !== 'Webster'){
+alert("Webster spelled incorrectly");
+return false;
+}
+if(arr[37][0] !== 'Winnebago'){
+alert("Winnebago spelled incorrectly");
+return false;
+}
+if(arr[38][0] !== 'Woodbury'){
+alert("Woodbury spelled incorrectly");
+return false;
+}
+if(arr[39][0] !== 'Wright'){
+alert("Wright spelled incorrectly");
+return false;
+}
+return true;
+}
 
 function getType(num){
-if(num>=-1 && num<-.8){
-return pink;
+if(num>=-1 && num<-.8){	//Super Strong Republican
+return '#9A0300';
 }
-else if(num>=-.8 && num<-.6){
-return orangered;
+else if(num>=-.8 && num<-.6){	//Pretty Strong Republican
+return '#D50207';
 }
-else if(num>=-.6 && num<-.4){
-return salmon;
+else if(num>=-.6 && num<-.4){	//Fairly Strong Republican
+return '#DF6769';
 }
-else if(num>=-.4 && num<-.2){
-return lightsalmon;
+else if(num>=-.4 && num<-.2){	//Strong Republican
+return '#ECA2A4';
 }
-else if(num>=-.2 && num<0){
-return pink;
+else if(num>=-.2 && num<0){	//Republican
+return '#E7CAC7';
 }
-else if(num>=0 && num<.2){
-return powderblue;
+else if(num>=0 && num<.2){	//Democrat
+return '#CFE2F3';
 }
-else if(num>=.2 && num<.4){
-return deepskyblue;
+else if(num>=.2 && num<.4){	//Strong Democrat
+return '#9DC5E9';
 }
-else if(num>=.4 && num<.6){
-return DodgerBlue;
+else if(num>=.4 && num<.6){	//Fairly Strong Democrat
+return '#73A7D5';
 }
-else if(num>.6 && num<.8){
-return mediumblue;
+else if(num>.6 && num<.8){	//Pretty Strong Democrat
+return '#3685C8';
 }
-else if(num>.8 && num<1){
-return darkblue;
+else if(num>.8 && num<1){	//Super Strong Democrat
+return '#11538F';
 }
 }
 
 </script>
+
 </body>
 
 
